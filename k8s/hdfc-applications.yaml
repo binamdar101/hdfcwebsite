@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-deployment
+  namespace: banking
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insurance
+  template:
+    metadata:
+      labels:
+        app: insurance
+    spec:
+      containers:
+        - name: insurance
+          image: 322814813226.dkr.ecr.us-east-1.amazonaws.com/hdfc-insurance:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insurance-service
+  namespace: banking
+spec:
+  selector:
+    app: insurance
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internetbanking-deployment
+  namespace: banking
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: internetbanking
+  template:
+    metadata:
+      labels:
+        app: internetbanking
+    spec:
+      containers:
+        - name: internetbanking
+          image: 322814813226.dkr.ecr.us-east-1.amazonaws.com/hdfc-internetbanking:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: internetbanking-service
+  namespace: banking
+spec:
+  selector:
+    app: internetbanking
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
