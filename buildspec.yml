@@ -6,33 +6,28 @@ env:
     AWS_DEFAULT_REGION: "us-east-1"
 
 phases:
-
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-
       - echo Detecting changed application...
       - CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
-      - echo Changed files:
       - echo "$CHANGED_FILES"
-
       - |
-        if echo "$CHANGED_FILES" | grep -q "^insurance/"; then
-          echo "Insurance folder changed"
-          APP_NAME="insurance"
-          REPOSITORY_NAME="hdfc-insurance"
-        elif echo "$CHANGED_FILES" | grep -q "^internetbanking/"; then
-          echo "Internet Banking folder changed"
-          APP_NAME="internetbanking"
-          REPOSITORY_NAME="hdfc-internetbanking"
-        else
-          echo "No application folder changed"
-          exit 0
-        fi
-
+          if echo "$CHANGED_FILES" | grep -q "^insurance/"; then
+            echo "Insurance folder changed"
+            APP_NAME="insurance"
+            REPOSITORY_NAME="hdfc-insurance"
+          elif echo "$CHANGED_FILES" | grep -q "^internetbanking/"; then
+            echo "Internet Banking folder changed"
+            APP_NAME="internetbanking"
+            REPOSITORY_NAME="hdfc-internetbanking"
+          else
+            echo "No application folder changed"
+            exit 0
+          fi
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$REPOSITORY_NAME
-      - echo Repository URI is $REPOSITORY_URI
+      - echo $REPOSITORY_URI
 
   build:
     commands:
