@@ -14,12 +14,21 @@ phases:
 
   build:
     commands:
+
       - echo Building Insurance image...
       - cd insurance
       - docker build -t hdfc-insurance:latest .
       - docker tag hdfc-insurance:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-insurance:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-insurance:latest
+      - cd ..
+
+      - echo Building Internet Banking image...
+      - cd internetbanking
+      - docker build -t hdfc-internetbanking:latest .
+      - docker tag hdfc-internetbanking:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-internetbanking:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-internetbanking:latest
+      - cd ..
 
   post_build:
     commands:
-      - echo Insurance build completed
+      - echo Both applications built successfully
