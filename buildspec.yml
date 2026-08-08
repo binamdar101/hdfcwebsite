@@ -1,4 +1,3 @@
-```yaml
 version: 0.2
 
 env:
@@ -7,22 +6,21 @@ env:
     AWS_DEFAULT_REGION: "us-east-1"
 
 phases:
-
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo Logging in to Amazon ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   build:
     commands:
-      - echo Building Insurance image...
+      - echo Building Insurance image
       - cd insurance
       - docker build -t hdfc-insurance:latest .
       - docker tag hdfc-insurance:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-insurance:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-insurance:latest
       - cd ..
 
-      - echo Building Internet Banking image...
+      - echo Building Internet Banking image
       - cd internetbanking
       - docker build -t hdfc-internetbanking:latest .
       - docker tag hdfc-internetbanking:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/hdfc-internetbanking:latest
@@ -38,5 +36,4 @@ artifacts:
     - k8s/namespace.yaml
     - k8s/hdfc-applications.yaml
     - k8s/ingress.yaml
-
-```
+    - k8s/deploy-buildspec.yml
