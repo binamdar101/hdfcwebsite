@@ -1,3 +1,4 @@
+```yaml
 version: 0.2
 
 env:
@@ -14,7 +15,6 @@ phases:
 
   build:
     commands:
-
       - echo Building Insurance image...
       - cd insurance
       - docker build -t hdfc-insurance:latest .
@@ -32,3 +32,11 @@ phases:
   post_build:
     commands:
       - echo Both applications built successfully
+
+artifacts:
+  files:
+    - k8s/namespace.yaml
+    - k8s/hdfc-applications.yaml
+    - k8s/ingress.yaml
+
+```
